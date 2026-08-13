@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Menu, Phone, X } from "lucide-react";
 import { site } from "@/lib/site";
+import logo from "@/assets/logo.png.asset.json";
+
 
 const links = [
   { href: "#services", label: "Services" },
@@ -16,13 +18,18 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <a href="#top" className="flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-ink-gradient font-display text-sm font-bold text-ink-foreground">
-            SL
-          </span>
+          <img
+            src={logo.url}
+            alt="Sree Laminations logo"
+            className="h-9 w-9 rounded-lg object-contain"
+            width={36}
+            height={36}
+          />
           <span className="font-display text-lg font-semibold tracking-tight">
-            Sree <span className="text-gold-foil">Lamination</span>
+            Sree <span className="text-gold-foil">Laminations</span>
           </span>
         </a>
+
 
         <nav aria-label="Main" className="hidden items-center gap-7 md:flex">
           {links.map((l) => (
