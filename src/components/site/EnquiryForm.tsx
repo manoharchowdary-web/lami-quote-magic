@@ -233,7 +233,7 @@ export function EnquiryForm() {
                     className={fieldClass}
                     placeholder="e.g. 500"
                     aria-invalid={!!errors.quantity}
-                    {...register("quantity")}
+                    {...register("quantity", { valueAsNumber: true })}
                   />
                   {errors.quantity && (
                     <p className="mt-1 text-xs text-destructive">{errors.quantity.message}</p>
