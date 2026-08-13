@@ -1,14 +1,22 @@
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { site } from "@/lib/site";
+import logo from "@/assets/logo.png.asset.json";
 
 export function Footer() {
   return (
     <footer className="border-t border-border bg-surface">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-3">
         <div>
+          <img
+            src={logo.url}
+            alt="Sree Laminations logo"
+            className="mb-3 h-12 w-auto object-contain"
+            loading="lazy"
+          />
           <h2 className="font-display text-xl font-semibold">
-            Sree <span className="text-gold-foil">Lamination</span>
+            Sree <span className="text-gold-foil">Laminations</span>
           </h2>
+
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
             Professional Gloss, Matt, Gold and 3D sheet lamination services with quality finishing
             and reliable service.
