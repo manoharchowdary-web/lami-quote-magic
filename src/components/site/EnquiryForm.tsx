@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, CheckCircle2 } from "lucide-react";
+import { Loader2, CheckCircle2, Calculator } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { laminationTypes } from "@/lib/site";
+import { currency, findRate, formatRate, sheetSizes } from "@/lib/rates";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(80),
@@ -17,7 +18,8 @@ const schema = z.object({
   lamination_type: z.enum(["Gloss", "Matt", "Gold", "3D", "Custom"], {
     message: "Select a lamination type",
   }),
-  quantity: z.string().trim().max(60).optional().or(z.literal("")),
+  size: z.string().min(1, "Select a sheet size"),
+  quantity: z.coerce.number().min(1, "Quantity must be at least 1").optional(),
   message: z.string().trim().max(1000).optional().or(z.literal("")),
 });
 
@@ -30,20 +32,43 @@ export function EnquiryForm() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { name: "", phone: "", email: "", quantity: "", message: "" },
+    defaultValues: {
+      name: "",
+      phone: "",
+      email: "",
+      lamination_type: "Gloss",
+      size: sheetSizes[0] ?? "12 x 18 in",
+      quantity: undefined,
+      message: "",
+    },
   });
+
+  const type = watch("lamination_type");
+  const size = watch("size");
+  const qty = watch("quantity");
+
+  const estimate = useMemo(() => {
+    const row = findRate(type, size);
+    if (!row || row.perSheet === null || !qty || qty < 1) return null;
+    return row.perSheet * qty;
+  }, [type, size, qty]);
 
   const onSubmit = async (values: FormValues) => {
     try {
+      const quantityText = [values.size, values.quantity ? `${values.quantity} sheets` : null]
+        .filter(Boolean)
+        .join(" — ");
+
       const { error } = await supabase.from("enquiries").insert({
         name: values.name,
         phone: values.phone,
         email: values.email || null,
         lamination_type: values.lamination_type,
-        quantity: values.quantity || null,
+        quantity: quantityText || null,
         message: values.message || null,
       });
 
@@ -73,8 +98,8 @@ export function EnquiryForm() {
             Get a <span className="text-gold-foil">quote</span>
           </h2>
           <p className="mt-4 max-w-md text-ink-foreground/75">
-            Tell us the finish, sheet size and quantity you need. We will reply with pricing — no
-            fixed rates are published because every job differs.
+            Pick your finish, sheet size and quantity to see an instant estimate, then send your
+            enquiry.
           </p>
           <ul className="mt-8 space-y-3 text-sm text-ink-foreground/75">
             <li>• Gloss, Matt, Gold, 3D or a custom finish</li>
@@ -158,14 +183,10 @@ export function EnquiryForm() {
                   </label>
                   <select
                     id="lamination_type"
-                    defaultValue=""
                     className={fieldClass}
                     aria-invalid={!!errors.lamination_type}
                     {...register("lamination_type")}
                   >
-                    <option value="" disabled>
-                      Select a finish
-                    </option>
                     {laminationTypes.map((t) => (
                       <option key={t.value} value={t.value}>
                         {t.value}
@@ -180,16 +201,67 @@ export function EnquiryForm() {
                 </div>
               </div>
 
-              <div>
-                <label htmlFor="quantity" className="text-sm font-medium">
-                  Quantity / sheet size (optional)
-                </label>
-                <input
-                  id="quantity"
-                  className={fieldClass}
-                  placeholder="e.g. 500 sheets, 12x18 inch"
-                  {...register("quantity")}
-                />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="size" className="text-sm font-medium">
+                    Sheet size *
+                  </label>
+                  <select
+                    id="size"
+                    className={fieldClass}
+                    aria-invalid={!!errors.size}
+                    {...register("size")}
+                  >
+                    {sheetSizes.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.size && (
+                    <p className="mt-1 text-xs text-destructive">{errors.size.message}</p>
+                  )}
+                </div>
+                <div>
+                  <label htmlFor="quantity" className="text-sm font-medium">
+                    Quantity (sheets) *
+                  </label>
+                  <input
+                    id="quantity"
+                    type="number"
+                    min={1}
+                    className={fieldClass}
+                    placeholder="e.g. 500"
+                    aria-invalid={!!errors.quantity}
+                    {...register("quantity", { valueAsNumber: true })}
+                  />
+                  {errors.quantity && (
+                    <p className="mt-1 text-xs text-destructive">{errors.quantity.message}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Live estimate */}
+              <div
+                className="rounded-xl bg-secondary/60 p-4"
+                aria-live="polite"
+              >
+                <div className="flex items-center gap-2 text-sm font-medium">
+                  <Calculator className="h-4 w-4 text-accent" aria-hidden="true" />
+                  Estimated total
+                </div>
+                {estimate !== null ? (
+                  <p className="mt-1 font-display text-3xl font-semibold text-gold-foil">
+                    {formatRate(estimate)}
+                  </p>
+                ) : (
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Enter a quantity to see the estimated price.
+                  </p>
+                )}
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Indicative only — final amount confirmed after artwork review.
+                </p>
               </div>
 
               <div>

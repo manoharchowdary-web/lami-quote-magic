@@ -1,12 +1,5 @@
 // ======================================================================
 // RATE CARD — EDIT THIS FILE TO PUBLISH YOUR PRICES
-// ----------------------------------------------------------------------
-// No prices have been provided yet, so every rate below is `null`.
-// While a rate is `null`, the website shows "Rate on request" instead of
-// a number, and the calculator asks the customer to enquire.
-//
-// To publish a rate, replace `null` with your per-sheet rate in rupees,
-// e.g.  perSheet: 3.5
 // ======================================================================
 
 export type RateRow = {
@@ -26,10 +19,10 @@ export const minimumCharge: number | null = null;
 export const currency = "₹";
 
 export const rateCard: RateRow[] = [
-  { type: "Gloss", size: "12 x 18 in", perSheet: null },
-  { type: "Matt", size: "12 x 18 in", perSheet: null },
-  { type: "Gold", size: "12 x 18 in", perSheet: null },
-  { type: "3D", size: "12 x 18 in", perSheet: null },
+  { type: "Gloss", size: "12 x 18 in", perSheet: 0.5, note: "50 paise per sheet" },
+  { type: "Matt", size: "12 x 18 in", perSheet: 0.7, note: "70 paise per sheet" },
+  { type: "Gold", size: "12 x 18 in", perSheet: 1.25, note: "₹1.25 per sheet" },
+  { type: "3D", size: "12 x 18 in", perSheet: 1.0, note: "₹1 per sheet" },
   { type: "Custom", size: "As per artwork", perSheet: null, note: "Quoted after review" },
 ];
 
