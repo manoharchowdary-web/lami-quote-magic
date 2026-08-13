@@ -6,7 +6,9 @@ import logo from "@/assets/logo.png.asset.json";
 
 const links = [
   { href: "#services", label: "Services" },
+  { href: "#rates", label: "Rates" },
   { href: "#process", label: "Process" },
+
   { href: "#why-us", label: "Why us" },
   { href: "#enquiry", label: "Contact" },
 ];
