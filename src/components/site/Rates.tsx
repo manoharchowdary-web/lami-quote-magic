@@ -2,11 +2,10 @@ import { useMemo, useState } from "react";
 import { Calculator, Info } from "lucide-react";
 import { laminationTypes } from "@/lib/site";
 import {
+  calculateEstimate,
   currency,
-  findRate,
   formatRate,
   hasPublishedRates,
-  minimumCharge,
   rateCard,
   sheetSizes,
 } from "@/lib/rates";
@@ -16,13 +15,10 @@ export function Rates() {
   const [size, setSize] = useState<string>(sheetSizes[0] ?? "");
   const [qty, setQty] = useState<number>(100);
 
-  const row = useMemo(() => findRate(type, size), [type, size]);
-
   const total = useMemo(() => {
-    if (!row || row.perSheet === null || !qty || qty < 1) return null;
-    const raw = row.perSheet * qty;
-    return minimumCharge !== null ? Math.max(raw, minimumCharge) : raw;
-  }, [row, qty]);
+    if (!qty || qty < 1) return null;
+    return calculateEstimate(type, size, qty);
+  }, [type, size, qty]);
 
   return (
     <section id="rates" className="scroll-mt-20 bg-surface py-20">
@@ -44,12 +40,12 @@ export function Rates() {
           {/* Rate table */}
           <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-soft">
             <table className="w-full text-left text-sm">
-              <caption className="sr-only">Lamination rate card per sheet</caption>
+              <caption className="sr-only">Lamination rate card per 100 square inches</caption>
               <thead className="bg-secondary/60">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-semibold">Finish</th>
                   <th scope="col" className="px-4 py-3 font-semibold">Sheet size</th>
-                  <th scope="col" className="px-4 py-3 text-right font-semibold">Per sheet</th>
+                  <th scope="col" className="px-4 py-3 text-right font-semibold">Rate / 100 sq in</th>
                 </tr>
               </thead>
               <tbody>

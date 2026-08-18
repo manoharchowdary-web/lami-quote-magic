@@ -6,7 +6,7 @@ import { Loader2, CheckCircle2, Calculator } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { laminationTypes } from "@/lib/site";
-import { currency, findRate, formatRate, sheetSizes } from "@/lib/rates";
+import { calculateEstimate, formatRate, sheetSizes } from "@/lib/rates";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(80),
@@ -52,9 +52,8 @@ export function EnquiryForm() {
   const qty = watch("quantity");
 
   const estimate = useMemo(() => {
-    const row = findRate(type, size);
-    if (!row || row.perSheet === null || !qty || qty < 1) return null;
-    return row.perSheet * qty;
+    if (!qty || qty < 1) return null;
+    return calculateEstimate(type, size, qty);
   }, [type, size, qty]);
 
   const onSubmit = async (values: FormValues) => {
