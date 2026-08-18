@@ -6,7 +6,7 @@ import { Loader2, CheckCircle2, Calculator } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { laminationTypes } from "@/lib/site";
-import { currency, findRate, formatRate, sheetSizes } from "@/lib/rates";
+import { calculateEstimate, formatRate, sheetSizes } from "@/lib/rates";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(80),

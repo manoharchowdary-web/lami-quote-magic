@@ -2,11 +2,10 @@ import { useMemo, useState } from "react";
 import { Calculator, Info } from "lucide-react";
 import { laminationTypes } from "@/lib/site";
 import {
+  calculateEstimate,
   currency,
-  findRate,
   formatRate,
   hasPublishedRates,
-  minimumCharge,
   rateCard,
   sheetSizes,
 } from "@/lib/rates";
