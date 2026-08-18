@@ -40,12 +40,12 @@ export function Rates() {
           {/* Rate table */}
           <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-soft">
             <table className="w-full text-left text-sm">
-              <caption className="sr-only">Lamination rate card per sheet</caption>
+              <caption className="sr-only">Lamination rate card per 100 square inches</caption>
               <thead className="bg-secondary/60">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-semibold">Finish</th>
                   <th scope="col" className="px-4 py-3 font-semibold">Sheet size</th>
-                  <th scope="col" className="px-4 py-3 text-right font-semibold">Per sheet</th>
+                  <th scope="col" className="px-4 py-3 text-right font-semibold">Rate / 100 sq in</th>
                 </tr>
               </thead>
               <tbody>
