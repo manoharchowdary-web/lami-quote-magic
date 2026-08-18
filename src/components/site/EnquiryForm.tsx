@@ -52,9 +52,8 @@ export function EnquiryForm() {
   const qty = watch("quantity");
 
   const estimate = useMemo(() => {
-    const row = findRate(type, size);
-    if (!row || row.perSheet === null || !qty || qty < 1) return null;
-    return row.perSheet * qty;
+    if (!qty || qty < 1) return null;
+    return calculateEstimate(type, size, qty);
   }, [type, size, qty]);
 
   const onSubmit = async (values: FormValues) => {

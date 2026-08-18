@@ -15,13 +15,10 @@ export function Rates() {
   const [size, setSize] = useState<string>(sheetSizes[0] ?? "");
   const [qty, setQty] = useState<number>(100);
 
-  const row = useMemo(() => findRate(type, size), [type, size]);
-
   const total = useMemo(() => {
-    if (!row || row.perSheet === null || !qty || qty < 1) return null;
-    const raw = row.perSheet * qty;
-    return minimumCharge !== null ? Math.max(raw, minimumCharge) : raw;
-  }, [row, qty]);
+    if (!qty || qty < 1) return null;
+    return calculateEstimate(type, size, qty);
+  }, [type, size, qty]);
 
   return (
     <section id="rates" className="scroll-mt-20 bg-surface py-20">
