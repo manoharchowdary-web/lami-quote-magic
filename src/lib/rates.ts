@@ -83,8 +83,8 @@ export function findRate(type: string, size: string): RateRow | undefined {
 export function parseSizeDimensions(size: string): { width: number; height: number } | null {
   const match = size.match(/([\d.]+)\s*x\s*([\d.]+)\s*in/i);
   if (!match) return null;
-  const width = parseFloat(match[1]);
-  const height = parseFloat(match[2]);
+  const width = parseFloat(match[1]!);
+  const height = parseFloat(match[2]!);
   if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return null;
   return { width, height };
 }
