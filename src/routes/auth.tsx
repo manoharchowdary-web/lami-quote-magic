@@ -4,7 +4,6 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import logo from "@/assets/logo.png.asset.json";
 
 const TITLE = "Staff Sign In | Sree Laminations";
@@ -82,16 +81,6 @@ function AuthPage() {
     }
   };
 
-  const onGoogle = async () => {
-    try {
-      await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    } catch (err) {
-      toast.error("Google sign-in failed", {
-        description: err instanceof Error ? err.message : "Please try again.",
-      });
-    }
-  };
-
   const fieldClass =
     "mt-1.5 w-full rounded-xl border border-input bg-background px-4 py-3 text-sm outline-none transition-shadow placeholder:text-muted-foreground focus:ring-2 focus:ring-ring";
 
@@ -150,18 +139,6 @@ function AuthPage() {
             {mode === "signin" ? "Sign in" : "Sign up"}
           </button>
         </form>
-
-        <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
-        </div>
-
-        <button
-          type="button"
-          onClick={onGoogle}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-semibold transition-colors hover:bg-secondary"
-        >
-          Continue with Google
-        </button>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           {mode === "signin" ? "No account yet?" : "Already have an account?"}{" "}
