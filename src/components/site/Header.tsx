@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Menu, Phone, X } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { site } from "@/lib/site";
 import logo from "@/assets/logo.png.asset.json";
 
@@ -53,6 +54,12 @@ export function Header() {
             <Phone className="h-4 w-4 text-accent" aria-hidden="true" />
             {site.phones[0]}
           </a>
+          <Link
+            to="/auth"
+            className="hidden rounded-full border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-secondary sm:inline-flex"
+          >
+            Staff login
+          </Link>
           <a
             href="#enquiry"
             className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-soft transition-transform hover:-translate-y-0.5"
