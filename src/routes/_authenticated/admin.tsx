@@ -326,8 +326,13 @@ function AdminPage() {
                       {s}
                     </button>
                   ))}
-                  <QuoteBoxTrigger enquiry={e} />
                 </div>
+
+                <QuoteBox
+                  enquiry={e}
+                  onSaved={() => queryClient.invalidateQueries({ queryKey: ["enquiries"] })}
+                />
+
 
               </li>
             ))}
