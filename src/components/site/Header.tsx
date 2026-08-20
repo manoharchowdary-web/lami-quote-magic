@@ -64,12 +64,13 @@ export function Header() {
           >
             Staff login
           </Link>
-          <a
-            href="#enquiry"
+          <Link
+            to="/contact"
             className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-soft transition-transform hover:-translate-y-0.5"
           >
             Get a Quote
-          </a>
+          </Link>
+
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -87,15 +88,16 @@ export function Header() {
           <ul className="mx-auto max-w-6xl px-4 py-2 sm:px-6">
             {links.map((l) => (
               <li key={l.href}>
-                <a
-                  href={l.href}
+                <Link
+                  to={l.href}
                   onClick={() => setOpen(false)}
                   className="block border-b border-border/60 py-3 text-sm font-medium last:border-0"
                 >
                   {l.label}
-                </a>
+                </Link>
               </li>
             ))}
+
           </ul>
         </nav>
       )}
