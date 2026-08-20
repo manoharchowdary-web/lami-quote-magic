@@ -1,5 +1,7 @@
 import { Check } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { laminationTypes } from "@/lib/site";
+
 
 export function Services() {
   return (
@@ -38,12 +40,13 @@ export function Services() {
                 </li>
               ))}
             </ul>
-            <a
-              href="#enquiry"
+            <Link
+              to="/contact"
               className="mt-5 text-sm font-semibold text-foreground underline-offset-4 hover:underline"
             >
               Request pricing →
-            </a>
+            </Link>
+
           </article>
         ))}
       </div>

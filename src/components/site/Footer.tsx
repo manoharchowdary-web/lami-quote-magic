@@ -1,6 +1,8 @@
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { site } from "@/lib/site";
 import logo from "@/assets/logo.png.asset.json";
+
 
 export function Footer() {
   return (
@@ -36,7 +38,10 @@ export function Footer() {
             ))}
             <li className="flex items-start gap-2 text-muted-foreground">
               <Mail className="mt-0.5 h-4 w-4 text-accent" aria-hidden="true" />
-              <span>{site.email}</span>
+              <a href={`mailto:${site.email}`} className="hover:underline">
+                {site.email}
+              </a>
+
             </li>
             <li className="flex items-start gap-2 text-muted-foreground">
               <MapPin className="mt-0.5 h-4 w-4 text-accent" aria-hidden="true" />
@@ -58,12 +63,13 @@ export function Footer() {
             <li>3D lamination</li>
             <li>Custom finishes</li>
           </ul>
-          <a
-            href="#enquiry"
+          <Link
+            to="/contact"
             className="mt-5 inline-flex rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
           >
             Get a Quote
-          </a>
+          </Link>
+
         </div>
       </div>
 

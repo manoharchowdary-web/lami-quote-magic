@@ -5,7 +5,7 @@ export const site = {
   name: "Sree Lamination",
   tagline: "Gloss, Matt, Gold & 3D sheet lamination",
   phones: ["9966643111", "7799330008", "9441024401"],
-  email: "[PLACEHOLDER — add email address]",
+  email: "srikanthkothapally1981@gmail.com",
   address: "[PLACEHOLDER — add full shop address]",
   hours: "[PLACEHOLDER — add working hours]",
   mapsUrl: "", // TODO: paste a Google Maps link
