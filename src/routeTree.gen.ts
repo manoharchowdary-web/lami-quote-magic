@@ -12,6 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ProcessRouteImport } from './routes/process'
+import { Route as RatesRouteImport } from './routes/rates'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as WhyUsRouteImport } from './routes/why-us'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const IndexRoute = IndexRouteImport.update({
@@ -28,6 +33,31 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProcessRoute = ProcessRouteImport.update({
+  id: '/process',
+  path: '/process',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RatesRoute = RatesRouteImport.update({
+  id: '/rates',
+  path: '/rates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WhyUsRoute = WhyUsRouteImport.update({
+  id: '/why-us',
+  path: '/why-us',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -37,11 +67,21 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/process': typeof ProcessRoute
+  '/rates': typeof RatesRoute
+  '/services': typeof ServicesRoute
+  '/why-us': typeof WhyUsRoute
   '/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/process': typeof ProcessRoute
+  '/rates': typeof RatesRoute
+  '/services': typeof ServicesRoute
+  '/why-us': typeof WhyUsRoute
   '/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRoutesById {
@@ -49,20 +89,56 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/process': typeof ProcessRoute
+  '/rates': typeof RatesRoute
+  '/services': typeof ServicesRoute
+  '/why-us': typeof WhyUsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/admin'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/contact'
+    | '/process'
+    | '/rates'
+    | '/services'
+    | '/why-us'
+    | '/admin'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/admin'
-  id: '__root__' | '/' | '/_authenticated' | '/auth' | '/_authenticated/admin'
+  to:
+    | '/'
+    | '/auth'
+    | '/contact'
+    | '/process'
+    | '/rates'
+    | '/services'
+    | '/why-us'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/contact'
+    | '/process'
+    | '/rates'
+    | '/services'
+    | '/why-us'
+    | '/_authenticated/admin'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ContactRoute: typeof ContactRoute
+  ProcessRoute: typeof ProcessRoute
+  RatesRoute: typeof RatesRoute
+  ServicesRoute: typeof ServicesRoute
+  WhyUsRoute: typeof WhyUsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -86,6 +162,41 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/process': {
+      id: '/process'
+      path: '/process'
+      fullPath: '/process'
+      preLoaderRoute: typeof ProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rates': {
+      id: '/rates'
+      path: '/rates'
+      fullPath: '/rates'
+      preLoaderRoute: typeof RatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/why-us': {
+      id: '/why-us'
+      path: '/why-us'
+      fullPath: '/why-us'
+      preLoaderRoute: typeof WhyUsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
@@ -113,6 +224,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ContactRoute: ContactRoute,
+  ProcessRoute: ProcessRoute,
+  RatesRoute: RatesRoute,
+  ServicesRoute: ServicesRoute,
+  WhyUsRoute: WhyUsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader2, RefreshCw, LogOut, Mail, Phone, ShieldAlert } from "lucide-react";
+import { Loader2, RefreshCw, LogOut, Mail, Phone, ShieldAlert, IndianRupee, Send } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo.png.asset.json";
@@ -38,9 +38,140 @@ type Enquiry = {
   status: string;
   admin_notes: string | null;
   created_at: string;
+  quoted_amount: number | null;
+  quote_note: string | null;
+  quoted_at: string | null;
 };
 
 const statuses = ["new", "contacted", "quoted", "closed"] as const;
+
+function QuoteBox({ enquiry, onSaved }: { enquiry: Enquiry; onSaved: () => void }) {
+  const [open, setOpen] = useState(enquiry.quoted_amount !== null);
+  const [amount, setAmount] = useState(
+    enquiry.quoted_amount !== null ? String(enquiry.quoted_amount) : ""
+  );
+  const [note, setNote] = useState(enquiry.quote_note ?? "");
+  const [saving, setSaving] = useState(false);
+
+  const send = async () => {
+    const value = Number(amount);
+    if (!Number.isFinite(value) || value <= 0) {
+      toast.error("Enter a valid quote amount");
+      return;
+    }
+    setSaving(true);
+    const { error } = await supabase
+      .from("enquiries")
+      .update({
+        quoted_amount: value,
+        quote_note: note.trim() || null,
+        quoted_at: new Date().toISOString(),
+        status: "quoted",
+      })
+      .eq("id", enquiry.id);
+    setSaving(false);
+    if (error) {
+      toast.error("Could not save the quote", { description: error.message });
+      return;
+    }
+    toast.success("Quote confirmed", { description: "Status updated to quoted." });
+    onSaved();
+  };
+
+  const waText = encodeURIComponent(
+    `Hello ${enquiry.name}, your quote from Sree Laminations for ${enquiry.lamination_type} lamination${
+      enquiry.quantity ? ` (${enquiry.quantity})` : ""
+    } is ₹${amount || "___"}.${note.trim() ? ` ${note.trim()}` : ""}`
+  );
+  const waNumber = enquiry.phone.replace(/\D/g, "").replace(/^0+/, "");
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-soft transition-transform hover:-translate-y-0.5"
+      >
+        <IndianRupee className="h-3.5 w-3.5" /> Send quote
+      </button>
+    );
+  }
+
+  return (
+    <div className="mt-4 rounded-xl border border-border bg-secondary/40 p-4">
+      <div className="flex flex-wrap items-end gap-3">
+        <div>
+          <label htmlFor={`amt-${enquiry.id}`} className="text-xs font-medium">
+            Quote amount (₹)
+          </label>
+          <input
+            id={`amt-${enquiry.id}`}
+            type="number"
+            min={1}
+            step="0.01"
+            value={amount}
+            onChange={(ev) => setAmount(ev.target.value)}
+            className="mt-1 w-36 rounded-lg border border-input bg-background px-3 py-2 text-sm"
+            placeholder="e.g. 1250"
+          />
+        </div>
+        <div className="min-w-[12rem] flex-1">
+          <label htmlFor={`note-${enquiry.id}`} className="text-xs font-medium">
+            Note to customer (optional)
+          </label>
+          <input
+            id={`note-${enquiry.id}`}
+            value={note}
+            onChange={(ev) => setNote(ev.target.value)}
+            className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
+            placeholder="Delivery in 2 days, artwork approved"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={send}
+          disabled={saving}
+          className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground disabled:opacity-70"
+        >
+          {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+          Confirm quote
+        </button>
+      </div>
+
+      <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
+        <a
+          href={`https://wa.me/91${waNumber}?text=${waText}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full border border-border px-3 py-1.5 font-medium hover:bg-secondary"
+        >
+          Send on WhatsApp
+        </a>
+        {enquiry.email && (
+          <a
+            href={`mailto:${enquiry.email}?subject=${encodeURIComponent("Your quote from Sree Laminations")}&body=${waText}`}
+            className="rounded-full border border-border px-3 py-1.5 font-medium hover:bg-secondary"
+          >
+            Send by email
+          </a>
+        )}
+        {enquiry.quoted_at && (
+          <span className="text-muted-foreground">
+            Quoted ₹{enquiry.quoted_amount} on {new Date(enquiry.quoted_at).toLocaleString("en-IN")}
+          </span>
+        )}
+        <button
+          type="button"
+          onClick={() => setOpen(false)}
+          className="text-muted-foreground underline underline-offset-4"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+}
+
 
 function AdminPage() {
   const navigate = useNavigate();
@@ -196,6 +327,13 @@ function AdminPage() {
                     </button>
                   ))}
                 </div>
+
+                <QuoteBox
+                  enquiry={e}
+                  onSaved={() => queryClient.invalidateQueries({ queryKey: ["enquiries"] })}
+                />
+
+
               </li>
             ))}
           </ul>

@@ -6,13 +6,14 @@ import logo from "@/assets/logo.png.asset.json";
 
 
 const links = [
-  { href: "#services", label: "Services" },
-  { href: "#rates", label: "Rates" },
-  { href: "#process", label: "Process" },
+  { href: "/services", label: "Services" },
+  { href: "/rates", label: "Rates" },
+  { href: "/process", label: "Process" },
 
-  { href: "#why-us", label: "Why us" },
-  { href: "#enquiry", label: "Contact" },
-];
+  { href: "/why-us", label: "Why us" },
+  { href: "/contact", label: "Contact" },
+] as const;
+
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -20,7 +21,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-        <a href="#top" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <img
             src={logo.url}
             alt="Sree Laminations logo"
@@ -31,20 +32,23 @@ export function Header() {
           <span className="font-display text-lg font-semibold tracking-tight">
             Sree <span className="text-gold-foil">Laminations</span>
           </span>
-        </a>
+        </Link>
+
 
 
         <nav aria-label="Main" className="hidden items-center gap-7 md:flex">
           {links.map((l) => (
-            <a
+            <Link
               key={l.href}
-              href={l.href}
+              to={l.href}
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              activeProps={{ className: "text-sm font-medium text-foreground" }}
             >
               {l.label}
-            </a>
+            </Link>
           ))}
         </nav>
+
 
         <div className="flex items-center gap-2">
           <a
@@ -60,12 +64,13 @@ export function Header() {
           >
             Staff login
           </Link>
-          <a
-            href="#enquiry"
+          <Link
+            to="/contact"
             className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-soft transition-transform hover:-translate-y-0.5"
           >
             Get a Quote
-          </a>
+          </Link>
+
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -83,15 +88,16 @@ export function Header() {
           <ul className="mx-auto max-w-6xl px-4 py-2 sm:px-6">
             {links.map((l) => (
               <li key={l.href}>
-                <a
-                  href={l.href}
+                <Link
+                  to={l.href}
                   onClick={() => setOpen(false)}
                   className="block border-b border-border/60 py-3 text-sm font-medium last:border-0"
                 >
                   {l.label}
-                </a>
+                </Link>
               </li>
             ))}
+
           </ul>
         </nav>
       )}

@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { Calculator, Info } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { laminationTypes } from "@/lib/site";
+
 import {
   calculateEstimate,
   currency,
@@ -151,12 +153,13 @@ export function Rates() {
               )}
             </div>
 
-            <a
-              href="#enquiry"
+            <Link
+              to="/contact"
               className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-transform hover:-translate-y-0.5"
             >
               Get a Quote
-            </a>
+            </Link>
+
           </div>
         </div>
       </div>
